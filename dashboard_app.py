@@ -25,7 +25,8 @@ if __name__ == '__main__':
 
 @st.cache_data(persist= True)
 def load():
-    data= pd.read_csv("Stress-Lysis.csv")
+    url = "https://raw.githubusercontent.com/bhismaadiyasa/Stress_Detection-SVM-NB/main/Stress-Lysis.csv"
+    data = pd.read_csv(url)
     label= LabelEncoder()
     for i in data.columns:
         data[i] = label.fit_transform(data[i])
@@ -281,5 +282,5 @@ else:
         st.write("F1-Score: ", round(f1, 7))
 
         plot_metrics(metrics)
-        st.write("selesai proses")
+        st.write("-- End of Process --")
         

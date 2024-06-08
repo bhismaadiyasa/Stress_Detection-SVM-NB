@@ -14,6 +14,8 @@ import seaborn as sns
 from sklearn.preprocessing import label_binarize
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import GridSearchCV
+import altair as alt
+import plotly.express as px
 
 def main():
     st.title("Stress Level Dataset Model Training with SVM & Naive Bayes")
@@ -282,5 +284,33 @@ else:
         st.write("F1-Score: ", round(f1, 7))
 
         plot_metrics(metrics)
+
+
+        st.subheader("Comparison With Other Model Classification")
+        data_eval = {
+            "Classifier": ["Our "+classifier, "Mamdani-type fuzzy logic", "DNN", "Random forest", "OSM classifier", "XGBoost", "Decision tree", "Gradient Boosting"],
+            "Accuracy": [round(accuracy, 3), 0.97, 0.997, 1.0, 1.0, 0.963, 0.92, 0.995],
+            "Author": ["Ours", "Rachakonda et al., 2018", "Rachakonda et al., 2019", "Talaat & El-Balka, 2020", "Talaat & El-Balka, 2020", "Talaat & El-Balka, 2020", "Talaat & El-Balka, 2020", "Al-Atawi et al., 2023"]
+        }
+
+        # Create DataFrame
+        df_eval = pd.DataFrame(data_eval)
+
+        # Sort DataFrame by Accuracy
+        df_eval = df_eval.sort_values(by='Accuracy', ascending=False)  
+        
+        # Create color list based on condition
+        colors = ['Ours' if author == "Ours" else 'Other Authors)' for author in df_eval['Author']]
+
+        # Create bar chart
+        fig = px.bar(df_eval, x='Classifier', y='Accuracy', hover_data=['Author', 'Accuracy'], title='Based on Accuracy', color=colors)
+
+        # Display plot in Streamlit app
+        st.plotly_chart(fig)
+
+
+
+
+
         st.write("-- End of Process --")
         
